@@ -24,12 +24,16 @@ export const DraggableStaffName = ({ staff, onRemove, canRemove = true }: Dragga
     data: { 
       type: 'staff-name',
       staff 
+    },
+    transition: {
+      duration: 250,
+      easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
     }
   });
 
   const style = {
     transform: CSS.Transform.toString(transform),
-    transition,
+    transition: transition || 'transform 200ms ease',
   };
 
   return (
@@ -37,14 +41,14 @@ export const DraggableStaffName = ({ staff, onRemove, canRemove = true }: Dragga
       ref={setNodeRef}
       style={style}
       className={cn(
-        'flex items-center gap-2 p-2 h-12 bg-white border-r border-gray-200 font-medium',
-        isDragging && 'opacity-50 z-10'
+        'flex items-center gap-2 p-2 h-12 bg-white border-r border-gray-200 font-medium transition-all duration-200',
+        isDragging && 'opacity-50 z-10 scale-105 shadow-lg'
       )}
     >
       <div
         {...attributes}
         {...listeners}
-        className="cursor-grab active:cursor-grabbing"
+        className="cursor-grab active:cursor-grabbing hover:bg-gray-50 rounded p-1 transition-colors duration-150"
       >
         <GripVertical className="h-4 w-4 text-gray-400" />
       </div>

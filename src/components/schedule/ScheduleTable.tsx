@@ -79,7 +79,7 @@ export const ScheduleTable = ({
     if (draggedItem.type === 'staff-name') {
       const staff = draggedItem.staff;
       return (
-        <div className="bg-white border rounded px-2 py-1 shadow-lg">
+        <div className="bg-white border rounded px-2 py-1 shadow-xl transform scale-105 transition-all duration-200 animate-pulse">
           {staff.name}
         </div>
       );
@@ -87,7 +87,11 @@ export const ScheduleTable = ({
 
     if (draggedItem.type === 'shift') {
       const shift = draggedItem.shift;
-      return <DraggableShift shift={shift} id={`overlay-${shift}`} />;
+      return (
+        <div className="transform scale-110 transition-all duration-200 shadow-xl">
+          <DraggableShift shift={shift} id={`overlay-${shift}`} />
+        </div>
+      );
     }
 
     return null;
@@ -127,7 +131,10 @@ export const ScheduleTable = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              <SortableContext items={staff.map(s => s.id)} strategy={verticalListSortingStrategy}>
+              <SortableContext 
+                items={staff.map(s => s.id)} 
+                strategy={verticalListSortingStrategy}
+              >
                 {staff.map((staffMember) => (
                   <TableRow key={staffMember.id}>
                     <TableCell className="p-0">

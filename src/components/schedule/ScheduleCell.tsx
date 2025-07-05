@@ -21,14 +21,14 @@ export const ScheduleCell = ({ staffId, day, shift, onShiftChange }: ScheduleCel
     <div
       ref={setNodeRef}
       className={cn(
-        'p-2 h-12 flex items-center justify-center border-r border-gray-200 transition-colors',
-        isOver && 'bg-blue-50 border-blue-300'
+        'p-2 h-12 flex items-center justify-center border-r border-gray-200 transition-all duration-200',
+        isOver && 'bg-blue-50 border-blue-300 scale-105 shadow-inner'
       )}
     >
       <Badge
         variant="outline"
         className={cn(
-          'cursor-pointer transition-colors',
+          'cursor-pointer transition-all duration-200 hover:scale-105',
           SHIFT_COLORS[shift]
         )}
         onClick={() => {

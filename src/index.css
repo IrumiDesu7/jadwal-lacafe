@@ -118,3 +118,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .swap-animation {
+    animation: swap-pulse 0.4s ease-in-out;
+  }
+  
+  @keyframes swap-pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+  }
+}

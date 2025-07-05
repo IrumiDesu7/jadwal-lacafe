@@ -1,4 +1,4 @@
-import { DndContext, type DragEndEvent, DragOverlay, type DragStartEvent, closestCenter } from '@dnd-kit/core';
+import { DndContext, type DragEndEvent, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card } from '@/components/ui/card';
@@ -7,19 +7,7 @@ import { DraggableStaffName } from './DraggableStaffName';
 import { DraggableShift } from './DraggableShift';
 import { ScheduleCell } from './ScheduleCell';
 import { StaffManager } from './StaffManager';
-import { useState } from 'react';
 
-type StaffDragData = {
-  type: 'staff-name';
-  staff: Staff;
-};
-
-type ShiftDragData = {
-  type: 'shift';
-  shift: ShiftType;
-};
-
-type DragData = StaffDragData | ShiftDragData;
 
 interface ScheduleTableProps {
   staff: Staff[];
@@ -28,6 +16,7 @@ interface ScheduleTableProps {
   onMoveStaff: (fromIndex: number, toIndex: number) => void;
   onRemoveStaff: (staffId: string) => void;
   onAddStaff: (name: string) => void;
+  onSwapSchedule: (staffId1: string, day1: DayOfWeek, staffId2: string, day2: DayOfWeek) => void;
 }
 
 export const ScheduleTable = ({
@@ -36,19 +25,14 @@ export const ScheduleTable = ({
   onUpdateSchedule,
   onMoveStaff,
   onRemoveStaff,
-  onAddStaff
+  onAddStaff,
+  onSwapSchedule
 }: ScheduleTableProps) => {
-  const [draggedItem, setDraggedItem] = useState<DragData | null>(null);
-
-  const handleDragStart = (event: DragStartEvent) => {
-    setDraggedItem(event.active.data.current as DragData || null);
-  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     
     if (!over) {
-      setDraggedItem(null);
       return;
     }
 
@@ -70,37 +54,25 @@ export const ScheduleTable = ({
       onUpdateSchedule(staffId, day as DayOfWeek, shift);
     }
 
-    setDraggedItem(null);
+    if (activeData?.type === 'schedule-shift' && overData?.type === 'schedule-cell') {
+      const { sourceStaffId, sourceDay } = activeData;
+      const { staffId: targetStaffId, day: targetDay } = overData;
+      
+      if (sourceStaffId !== targetStaffId || sourceDay !== targetDay) {
+        onSwapSchedule(
+          sourceStaffId, 
+          sourceDay as DayOfWeek, 
+          targetStaffId, 
+          targetDay as DayOfWeek
+        );
+      }
+    }
   };
 
-  const renderDragOverlay = () => {
-    if (!draggedItem) return null;
-
-    if (draggedItem.type === 'staff-name') {
-      const staff = draggedItem.staff;
-      return (
-        <div className="bg-white border rounded px-2 py-1 shadow-xl transform scale-105 transition-all duration-200 animate-pulse">
-          {staff.name}
-        </div>
-      );
-    }
-
-    if (draggedItem.type === 'shift') {
-      const shift = draggedItem.shift;
-      return (
-        <div className="transform scale-110 transition-all duration-200 shadow-xl">
-          <DraggableShift shift={shift} id={`overlay-${shift}`} />
-        </div>
-      );
-    }
-
-    return null;
-  };
 
   return (
     <DndContext
       collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
       <div className="space-y-4">
@@ -162,7 +134,6 @@ export const ScheduleTable = ({
         </Card>
       </div>
 
-      <DragOverlay>{renderDragOverlay()}</DragOverlay>
     </DndContext>
   );
 };

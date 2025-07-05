@@ -122,12 +122,52 @@ export const useSchedule = () => {
     });
   }, []);
 
+  const swapSchedule = useCallback((
+    staffId1: string, 
+    day1: DayOfWeek, 
+    staffId2: string, 
+    day2: DayOfWeek
+  ) => {
+    setSchedule(prev => {
+      const shift1 = prev[staffId1]?.[day1];
+      const shift2 = prev[staffId2]?.[day2];
+      
+      if (!shift1 || !shift2) return prev;
+      
+      // Handle same staff member swap
+      if (staffId1 === staffId2) {
+        return {
+          ...prev,
+          [staffId1]: {
+            ...prev[staffId1],
+            [day1]: shift2,
+            [day2]: shift1
+          }
+        };
+      }
+      
+      // Handle different staff members swap
+      return {
+        ...prev,
+        [staffId1]: {
+          ...prev[staffId1],
+          [day1]: shift2
+        },
+        [staffId2]: {
+          ...prev[staffId2],
+          [day2]: shift1
+        }
+      };
+    });
+  }, []);
+
   return {
     staff,
     schedule,
     addStaff,
     removeStaff,
     updateSchedule,
-    moveStaff
+    moveStaff,
+    swapSchedule
   };
 };

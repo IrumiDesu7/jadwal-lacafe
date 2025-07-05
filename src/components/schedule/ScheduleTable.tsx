@@ -105,13 +105,13 @@ export const ScheduleTable = ({
     >
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Jadwal Mingguan</h1>
+          <h1 className="text-3xl font-bold">Jadwal Mingguan</h1>
           <StaffManager onAddStaff={onAddStaff} />
         </div>
 
         <div className="flex gap-4 mb-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Drag shifts:</span>
+            <span className="text-base font-medium">Drag shifts:</span>
             <DraggableShift shift="PAGI" id="draggable-pagi" />
             <DraggableShift shift="MALAM" id="draggable-malam" />
             <DraggableShift shift="LIBUR" id="draggable-libur" />
@@ -122,7 +122,7 @@ export const ScheduleTable = ({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-32">NAMA</TableHead>
+                <TableHead>NAMA</TableHead>
                 {DAYS_OF_WEEK.map((day) => (
                   <TableHead key={day} className="text-center">
                     {day}

@@ -53,7 +53,7 @@ export const DraggableStaffName = ({ staff, onRemove, canRemove = true }: Dragga
         <GripVertical className="h-4 w-4 text-gray-400" />
       </div>
       
-      <span className="flex-1 text-sm font-medium">{staff.name}</span>
+      <span className="flex-1 text-base font-medium">{staff.name}</span>
       
       {canRemove && (
         <Button
